@@ -1,0 +1,39 @@
+.global-header {
+  background-color: #1f2937;
+  color: #9ca3af;
+  padding: 20px;
+  font-family: sans-serif;
+  border-top: 1px solid #374151;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  font-size: 14px;
+}
+
+.header-content p {
+  margin: 0;
+  text-align: center;
+}
+
+.header-links {
+  display: flex;
+  gap: 20px;
+}
+
+.header-link {
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.header-link:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
