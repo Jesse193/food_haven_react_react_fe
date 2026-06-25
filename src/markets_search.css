@@ -1,0 +1,85 @@
+.markets-search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  padding: 0 16px;
+}
+
+.markets-search form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+  gap: 12px;
+}
+
+.markets-search label {
+  font-weight: 600;
+}
+
+.markets-search input,
+.markets-search button {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.markets-search input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.markets-search button {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #2c7be5;
+  color: #fff;
+  cursor: pointer;
+}
+
+.markets-search button:hover {
+  background: #1f6cd8;
+}
+.markets-results {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 16px 32px;
+}
+
+.search-results ul {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: grid;
+  gap: 16px;
+}
+
+.market-result-item {
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.market-result-name {
+  margin-bottom: 8px;
+}
+
+.market-result-address {
+  margin-bottom: 12px;
+  color: #4a5568;
+}
+
+.market-accepted-payment {
+  margin-top: 8px;
+  color: #1f2937;
+}
+
+.market-result-item strong {
+  display: block;
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
