@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { marketService } from './services/marketsService'
 import './markets_search.css'
+import { favoritesService } from './services/favoritesService'
 
 function MarketsResults() {
   const [searchParams] = useSearchParams()
@@ -244,6 +245,42 @@ function MarketsResults() {
                   Get directions
                 </button>
               ) : null
+              const addToFavoritesButton = (
+                <button
+                  type="button"
+                  className="market-favorite-button"
+                  onClick={async () => {
+                    try {
+                      await favoritesService.addFavorite(normalizedMarket.id)
+                      alert(`Added ${name} to favorites!`)
+                    } catch (addError) {
+                      console.error('Error adding to favorites:', addError)
+                      alert(`Failed to add ${name} to favorites: ${addError.message}`)
+                    }
+                  }}
+                >
+                  Add to Favorites
+                </button>
+              )
+              const removeFromFavoritesButton = (
+                <button
+                  type="button"
+                  className="market-remove-favorite-button"
+                  onClick={async () => {
+                    try {
+                      await favoritesService.removeFavorite(normalizedMarket.id)
+                      alert(`Removed ${name} from favorites!`)
+                    } catch (removeError) {
+                      console.error('Error removing from favorites:', removeError)
+                      alert(`Failed to remove ${name} from favorites: ${removeError.message}`)
+                    }
+                  }}
+                >
+                  Remove from Favorites
+                </button>
+              )
+              const isFavorite = false
+              const favoriteButton = isFavorite ? removeFromFavoritesButton : addToFavoritesButton
               const acceptedPaymentValue = normalizedMarket.accepted_payment || normalizedMarket.acceptedPayment || ''
               const acceptedPayments = acceptedPaymentValue
                 .split(/\s*;\s*/)
@@ -281,6 +318,8 @@ function MarketsResults() {
                   </div>
                   <div className="market-result-address">{addressText}</div>
                   {directionsButton}
+                  {addToFavoritesButton}
+                  {removeFromFavoritesButton}
                   {renderLocationDetails}
                   <br></br>
                   {renderRawLocationDetails}

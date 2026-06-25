@@ -8,6 +8,7 @@ import Privacy from './privacy.jsx'
 import MarketsSearch from './markets_search.jsx'
 import MarketsResults from './markets_results.jsx'
 import Directions from './directions.jsx'
+import Favorites from './favorites.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="markets" element={<MarketsSearch />} />
           <Route path="markets/results" element={<MarketsResults />} />
           <Route path="directions" element={<Directions />} />
+          <Route path="favorites" element={<Favorites />} />
         </Route>
       </Routes>
     </BrowserRouter>
