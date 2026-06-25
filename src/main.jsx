@@ -7,6 +7,7 @@ import Login from './login.jsx'
 import Privacy from './privacy.jsx'
 import MarketsSearch from './markets_search.jsx'
 import MarketsResults from './markets_results.jsx'
+import Directions from './directions.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="privacy-policy" element={<Privacy />} />
           <Route path="markets" element={<MarketsSearch />} />
           <Route path="markets/results" element={<MarketsResults />} />
+          <Route path="directions" element={<Directions />} />
         </Route>
       </Routes>
     </BrowserRouter>

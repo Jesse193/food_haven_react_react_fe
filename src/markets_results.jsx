@@ -10,6 +10,22 @@ function MarketsResults() {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
+  const originLatitude = searchParams.get('latitude')
+  const originLongitude = searchParams.get('longitude')
+
+  const parseCoordinate = (value) => {
+    const parsed = parseFloat(value)
+    return Number.isFinite(parsed) ? parsed : null
+  }
+
+  const getMarketCoordinate = (market, keys) => {
+    for (const key of keys) {
+      const value = market[key]
+      if (value != null && value !== '') return value
+    }
+    return null
+  }
+
   useEffect(() => {
     const latitude = searchParams.get('latitude')
     const longitude = searchParams.get('longitude')
@@ -188,6 +204,46 @@ function MarketsResults() {
                 </div>
               ) : null
               const descriptionText = !descriptionLooksLikeLocation && normalizedMarket.description ? <div>{normalizedMarket.description}</div> : null
+              const destLat = parseCoordinate(
+                getMarketCoordinate(normalizedMarket, [
+                  'latitude',
+                  'lat',
+                  'location_latitude',
+                  'locationLatitude',
+                  'latitude_value',
+                  'lat_value',
+                ]),
+              )
+              const destLon = parseCoordinate(
+                getMarketCoordinate(normalizedMarket, [
+                  'longitude',
+                  'lon',
+                  'lng',
+                  'location_longitude',
+                  'locationLongitude',
+                  'longitude_value',
+                  'lon_value',
+                ]),
+              )
+              const hasMarketCoordinates = destLat != null && destLon != null
+              const directionsButton = hasMarketCoordinates ? (
+                <button
+                  type="button"
+                  className="market-directions-button"
+                  onClick={() => {
+                    const params = new URLSearchParams({
+                      startLat: originLatitude,
+                      startLon: originLongitude,
+                      destLat: String(destLat),
+                      destLon: String(destLon),
+                      destName: name,
+                    })
+                    navigate(`/directions?${params.toString()}`)
+                  }}
+                >
+                  Get directions
+                </button>
+              ) : null
               const acceptedPaymentValue = normalizedMarket.accepted_payment || normalizedMarket.acceptedPayment || ''
               const acceptedPayments = acceptedPaymentValue
                 .split(/\s*;\s*/)
@@ -224,6 +280,7 @@ function MarketsResults() {
                     <strong>{name}</strong>
                   </div>
                   <div className="market-result-address">{addressText}</div>
+                  {directionsButton}
                   {renderLocationDetails}
                   <br></br>
                   {renderRawLocationDetails}
