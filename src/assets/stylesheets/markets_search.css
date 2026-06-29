@@ -57,7 +57,7 @@ html, body {
 }
 
 .markets-search button:hover {
-  background: #ef5b5bff;
+  background: #d44c4c;
 }
 
 .markets-results {
@@ -147,7 +147,7 @@ html, body {
   padding: 10px 14px;
   border: none;
   border-radius: 6px;
-  background: #ef5b5bff;
+  background: #d44c4c;
   color: #fff;
   cursor: pointer;
   margin: 0 !important;

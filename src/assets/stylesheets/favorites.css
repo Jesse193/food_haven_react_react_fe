@@ -83,7 +83,8 @@ html, body, #root {
 market-remove-favorite-button:hover { 
   text-decoration: none; 
   color: white; 
-  cursor: pointer; 
+  cursor: pointer;
+  background: #d44c4c;
 } 
 
 .favorites span a, 

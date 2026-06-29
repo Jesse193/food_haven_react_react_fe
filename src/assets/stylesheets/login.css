@@ -43,4 +43,10 @@ html, body, #root {
   color: #fff; 
   cursor: pointer; 
   align-self: center; 
-} 
+}
+
+.login button:hover {
+  background: #d44c4c;
+  color: #fff;
+  text-decoration: none;
+}
