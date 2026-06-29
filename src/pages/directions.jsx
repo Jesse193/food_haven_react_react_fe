@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import './directions.css'
+import '../assets/stylesheets/directions.css'
 
 const Directions = () => {
   const [searchParams] = useSearchParams()
@@ -18,6 +18,7 @@ const Directions = () => {
   const address = searchParams.get('address') || ''
   const mapsApiKey = import.meta.env.VITE_MAPS_API_KEY || ''
   const hasRoute = originLat != null && originLon != null && destinationLat != null && destinationLon != null
+  const [directionsUrl, setDirectionsUrl] = useState('')
 
   function parseNumber(value) {
     const parsed = parseFloat(value)
@@ -79,6 +80,8 @@ const Directions = () => {
             setRouteError(null)
             setModalError(null)
             directionsRenderer.setDirections(result)
+            const url = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLon}&destination=${destinationLat},${destinationLon}&travelmode=${travelMode.toLowerCase()}`
+            setDirectionsUrl(url)
             if (closeModalOnSuccess) {
               setIsModalOpen(false)
               setCloseModalOnSuccess(false)
@@ -115,37 +118,52 @@ const Directions = () => {
   return (
     <>
       <main className="commutes">
-        <div className="commutes-map" aria-label="Map">
-          <div className="map-view" />
+      <button className="back-button" type="button" onClick={() => window.history.back()}>
+        ← Back to Markets
+      </button>
+      <div className="commutes-map" aria-label="Map">
+        <div className="map-view" />
+        <div id="directions-panel-wrapper">
+          {directionsUrl && (
+            <a
+              href={directionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="google-directions-link"
+            >
+              Open in Google Maps
+            </a>
+          )}
           <div id="directions-panel" />
         </div>
+      </div>
 
-        <div className="commutes-info">
-          <div className="commutes-destinations">
-            <div className="destinations-container">
-              <div className="destination-list" />
-              <button className="add-button" type="button" onClick={() => {
-                setSelectedTravelMode(travelMode)
-                setIsModalOpen(true)
-              }}>
-                <svg aria-label="Add Icon" width="24px" height="24px" xmlns="http://www.w3.org/2000/svg">
-                  <use href="#commutes-add-icon" />
-                </svg>
-                <div className="label">Choose mode of transportation</div>
-              </button>
-            </div>
-            <button className="left-control hide" data-direction="-1" aria-label="Scroll left">
-              <svg width="24px" height="24px" xmlns="http://www.w3.org/2000/svg" data-direction="-1">
-                <use href="#commutes-chevron-left-icon" data-direction="-1" />
+      <div className="commutes-info">
+        <div className="commutes-destinations">
+          <div className="destinations-container">
+            <div className="destination-list" />
+            <button className="add-button" type="button" onClick={() => {
+              setSelectedTravelMode(travelMode)
+              setIsModalOpen(true)
+            }}>
+              <svg aria-label="Add Icon" width="24px" height="24px" xmlns="http://www.w3.org/2000/svg">
+                <use href="#commutes-add-icon" />
               </svg>
-            </button>
-            <button className="right-control hide" data-direction="1" aria-label="Scroll right">
-              <svg width="24px" height="24px" xmlns="http://www.w3.org/2000/svg" data-direction="1">
-                <use href="#commutes-chevron-right-icon" data-direction="1" />
-              </svg>
+              <div className="label">Choose mode of transportation</div>
             </button>
           </div>
+          <button className="left-control hide" data-direction="-1" aria-label="Scroll left">
+            <svg width="24px" height="24px" xmlns="http://www.w3.org/2000/svg" data-direction="-1">
+              <use href="#commutes-chevron-left-icon" data-direction="-1" />
+            </svg>
+          </button>
+          <button className="right-control hide" data-direction="1" aria-label="Scroll right">
+            <svg width="24px" height="24px" xmlns="http://www.w3.org/2000/svg" data-direction="1">
+              <use href="#commutes-chevron-right-icon" data-direction="1" />
+            </svg>
+          </button>
         </div>
+      </div>
       </main>
 
       <div className={isModalOpen ? 'commutes-modal-container show' : 'commutes-modal-container'}>
@@ -155,14 +173,6 @@ const Directions = () => {
               {destinationName ? `Choose travel mode to ${destinationName}` : 'Choose travel mode'}
             </h2>
             <form id="destination-form" onSubmit={(event) => event.preventDefault()}>
-              <input
-                type="text"
-                id="destination-address-input"
-                name="destination-address"
-                defaultValue={address}
-                autoComplete="off"
-                required
-              />
               <div className="error-message" role="alert">
                 {modalError}
               </div>

@@ -1,6 +1,5 @@
-// src/components/CookieConsent.jsx
 import { useEffect, useState } from 'react';
-import './CookieConsent.css';
+import '../assets/stylesheets/CookieConsent.css';
 
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);

@@ -41,38 +41,42 @@ function Login() {
 
   return (
     <>
-      <h1>Login</h1>
-      {token ? (
-        <div>
-          <p>Welcome!</p>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      ) : (
-        <form onSubmit={handleLogin}>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <br />
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <br />
-          <button type="submit">Login</button>
-        </form>
-      )}
-      {message && <p>{message}</p>}
+      <div className='login'>
+        {token ? (
+          <>
+            <button onClick={handleLogout}>Logout</button>
+            <h1>Welcome!</h1>
+          </>
+        ) : (
+          <>
+            <h1>Login</h1>
+            <form onSubmit={handleLogin}>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder='Email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <br />
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder='Password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <br />
+              <button type="submit">Login</button>
+            </form>
+          </>
+        )}
+        {message && <p>{message}</p>}
+      </div>
     </>
   )
 }
