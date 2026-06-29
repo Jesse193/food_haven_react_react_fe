@@ -60,7 +60,6 @@ function Favorites() {
                       {favorite.name || `Market #${favorite.id}`}
                     </a>
                   </span>
-                  <br />
                   <button
                     type="button"
                     className="market-remove-favorite-button"
