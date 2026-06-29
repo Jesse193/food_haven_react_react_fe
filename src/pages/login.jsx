@@ -44,7 +44,7 @@ function Login() {
       <div className='login'>
         {token ? (
           <>
-            <button onClick={handleLogout}>Logout</button>
+            <button className="logout" onClick={handleLogout}>Logout</button>
             <h1>Welcome!</h1>
           </>
         ) : (

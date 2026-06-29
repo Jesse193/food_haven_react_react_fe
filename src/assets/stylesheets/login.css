@@ -41,12 +41,35 @@ html, body, #root {
   border-radius: 6px; 
   background: #ef5b5bff; 
   color: #fff; 
-  cursor: pointer; 
-  align-self: center; 
+  cursor: pointer;
+  align-self: center;
 }
 
 .login button:hover {
   background: #d44c4c;
   color: #fff;
   text-decoration: none;
+}
+
+.login button.logout { 
+  box-sizing: border-box; 
+  padding: 12px 16px; 
+  border: none; 
+  border-radius: 6px; 
+  background: #ef5b5bff; 
+  color: #fff; 
+  cursor: pointer;
+  align-self: self-end;
+}
+
+.login button.logout:hover {
+  background: #d44c4c;
+  color: #fff;
+  text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  .login button.logout { 
+    align-self: center;
+  }
 }
