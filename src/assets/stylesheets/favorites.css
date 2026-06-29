@@ -1,0 +1,111 @@
+html, body, #root { 
+  min-height: 100vh;
+} 
+
+#root { 
+  display: flex; 
+  flex-direction: column; 
+  color: #4c2c69ff; 
+} 
+
+.favorites { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  width: 100%; 
+  margin-bottom: 5%; 
+} 
+
+.favorites a.login-button { 
+  display: block; 
+  box-sizing: border-box; 
+  padding: 12px 16px; 
+  border-radius: 6px; 
+  background: #ef5b5bff; 
+  color: #fff; 
+  text-decoration: none; 
+  font-weight: 500; 
+  font-size: 1.25rem; 
+  width: fit-content; 
+  margin-top: 5%; 
+  text-align: center; 
+} 
+
+.favorites a.login-button:hover { 
+  background: #d44c4c; 
+  color: #fff; 
+  text-decoration: none; 
+} 
+
+.favorites h1, .favorites p { 
+  text-align: center; 
+} 
+
+.favorites ul { 
+  list-style: none; 
+  padding: 0; 
+  margin: 16px auto 0; 
+  display: grid; 
+  
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+  gap: 24px; 
+  
+  width: 90%;
+  max-width: 1200px;
+} 
+
+.favorites li { 
+  padding: 30px; 
+  border: 1px solid #ccc; 
+  border-radius: 12px; 
+  background: #fff; 
+  box-sizing: border-box; 
+  text-align: center; 
+  
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: space-between; 
+  
+  min-height: 200px;
+  background-color: #f1f5f9;
+} 
+
+.favorites li .market-name,
+.favorites li .market-remove-favorite-button {
+  box-sizing: border-box; 
+  padding: 12px 16px; 
+  border: none; 
+  border-radius: 6px; 
+  text-decoration: none;
+  cursor: pointer; 
+  align-self: stretch;
+  text-align: center;
+  margin: 0; 
+}
+
+.favorites li .market-name { 
+  background: #2bc875ff; 
+} 
+
+.favorites li .market-name a {
+  text-decoration: none; 
+  color: #fff; 
+  font-size: larger; 
+  display: block; 
+  width: 100%;
+}
+
+.favorites li .market-name:hover { 
+  background: #24a661; 
+} 
+
+.favorites li .market-remove-favorite-button { 
+  background: #ef5b5bff; 
+  color: #fff; 
+  font-size: larger;
+} 
+
+.favorites li .market-remove-favorite-button:hover { 
+  background: #d44c4c; 
+}

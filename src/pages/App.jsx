@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import './App.css'
-import Overlay from './components/Overlay'
-import Footer from './components/Footer'
-import Header from './components/header'
+import '../assets/stylesheets/App.css'
+import Overlay from '../components/Overlay'
+import Footer from '../components/Footer'
+import Header from '../components/header'
 import { Outlet } from 'react-router-dom'
-import CookieConsent from './components/CookieConsent';
+import CookieConsent from '../components/CookieConsent';
 
 function App() {
   return (

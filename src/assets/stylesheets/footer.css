@@ -1,12 +1,13 @@
-.global-header {
-  background-color: #1f2937;
-  color: #9ca3af;
+.global-footer {
+  background-color: #009fb7ff;;
+  color: #4c2c69ff;
   padding: 20px;
   font-family: sans-serif;
-  border-top: 1px solid #374151;
+  border-top: 1px solid #009fb7ff;
+  margin-top: auto;
 }
 
-.header-content {
+.footer-content {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -17,23 +18,22 @@
   font-size: 14px;
 }
 
-.header-content p {
+.footer-content p {
   margin: 0;
-  text-align: center;
 }
 
-.header-links {
+.footer-links {
   display: flex;
   gap: 20px;
 }
 
-.header-link {
-  color: #9ca3af;
+.footer-link {
+  color: white;
   text-decoration: none;
   transition: color 0.2s;
 }
 
-.header-link:hover {
+.footer-link:hover {
   color: #ffffff;
   text-decoration: underline;
 }

@@ -1,4 +1,7 @@
 @import './markets_search.css';
+@import './login.css';
+@import './favorites.css';
+@import './MarketDetail.css';
 
 html, body, #root {
   margin: 0;

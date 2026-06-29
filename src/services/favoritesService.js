@@ -24,23 +24,30 @@ const getUrl = async (endpoint) => {
 
 const unwrapFavorite = (response) => { 
   if (!response) return response; 
+  
+  let item = response;
+  
   if (response.attributes) { 
-    return { id: response.id, ...response.attributes }; 
+    item = { id: response.id, ...response.attributes }; 
   } 
-  return response; 
+
+  return {
+    ...item,
+    id: String(item.id),
+    marketId: String(item.marketId || item.market_id || item.market || '')
+  };
 }; 
 
 export const favoritesService = { 
   addFavorite: async (marketId) => { 
     const response = await fetch(`${BASE_URL}/api/favorites`, { 
       method: 'POST', 
-      headers: getAuthHeaders(),
+      headers: getAuthHeaders(), 
       body: JSON.stringify({ market: marketId }), 
     }); 
-    
-    const data = await handleResponse(response, '/api/favorites');
+    const data = await handleResponse(response, '/api/favorites'); 
     return unwrapFavorite(data); 
-  },
+  }, 
 
   removeFavorite: async (marketId) => { 
     const response = await fetch(`${BASE_URL}/api/favorites/${marketId}`, { 
@@ -50,14 +57,12 @@ export const favoritesService = {
     return handleResponse(response, `/api/favorites/${marketId}`); 
   }, 
 
-  getFavoriteMarkets: async () => {
-    return getUrl('/api/favorites').then((serializerResult) => {
-      if (serializerResult && serializerResult.data) {
-        return serializerResult.data.map(unwrapFavorite);
-      }
-      return Array.isArray(serializerResult) ? serializerResult.map(unwrapFavorite) : [];
-    });
-  },
-
-
+  getFavoriteMarkets: async () => { 
+    return getUrl('/api/favorites').then((serializerResult) => { 
+      if (serializerResult && serializerResult.data) { 
+        return serializerResult.data.map(unwrapFavorite); 
+      } 
+      return Array.isArray(serializerResult) ? serializerResult.map(unwrapFavorite) : []; 
+    }); 
+  }, 
 };

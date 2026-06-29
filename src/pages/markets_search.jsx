@@ -1,20 +1,19 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCoordinates } from './services/coordinatesService'
-import './markets_search.css'
+import { getCoordinates } from '../services/coordinatesService'
+import '../assets/stylesheets/markets_search.css'
 
 function MarketsSearch() {
   const [addressLine1, setAddressLine1] = useState('')
-  const [addressLine2, setAddressLine2] = useState('')
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
   const [zipCode, setZipCode] = useState('')
-  const [searchRadius, setSearchRadius] = useState('10')
+  const [searchRadius, setSearchRadius] = useState('')
   const [error, setError] = useState(null)
   const navigate = useNavigate()
 
   const buildAddress = () => {
-    return [addressLine1, addressLine2, city, state, zipCode]
+    return [addressLine1, city, state, zipCode]
       .filter(Boolean)
       .join(', ')
   }
@@ -46,8 +45,8 @@ function MarketsSearch() {
 
   return (
     <div className="markets-search">
+      <h2>Search for Farmers Markets Nearby</h2>
       <form onSubmit={handleSearch}>
-        <label htmlFor="addressLine1">Address Line 1:</label>
         <input
           type="text"
           id="addressLine1"
@@ -55,15 +54,6 @@ function MarketsSearch() {
           value={addressLine1}
           onChange={(e) => setAddressLine1(e.target.value)}
         />
-        <label htmlFor="addressLine2">Address Line 2:</label>
-        <input
-          type="text"
-          id="addressLine2"
-          placeholder="Address Line 2"
-          value={addressLine2}
-          onChange={(e) => setAddressLine2(e.target.value)}
-        />
-        <label htmlFor="city">City:</label>
         <input
           type="text"
           id="city"
@@ -71,7 +61,6 @@ function MarketsSearch() {
           value={city}
           onChange={(e) => setCity(e.target.value)}
         />
-        <label htmlFor="state">State:</label>
         <input
           type="text"
           id="state"
@@ -79,7 +68,6 @@ function MarketsSearch() {
           value={state}
           onChange={(e) => setState(e.target.value)}
         />
-        <label htmlFor="zipCode">Zip Code:</label>
         <input
           type="text"
           id="zipCode"
@@ -87,11 +75,10 @@ function MarketsSearch() {
           value={zipCode}
           onChange={(e) => setZipCode(e.target.value)}
         />
-        <label htmlFor="searchRadius">Search Radius (miles):</label>
         <input
           type="number"
           id="searchRadius"
-          placeholder="Search Radius"
+          placeholder="Search Radius (miles)"
           value={searchRadius}
           onChange={(e) => setSearchRadius(e.target.value)}
         />
