@@ -45,7 +45,7 @@ function MarketsSearch() {
 
   return (
     <div className="markets-search">
-      <h2>Search for Farmers Markets nearby</h2>
+      <h2>Search for Farmers Markets Nearby</h2>
       <form onSubmit={handleSearch}>
         <input
           type="text"
