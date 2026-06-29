@@ -32,7 +32,7 @@ function MarketsResults() {
       try {
         const [marketData, favoritesData] = await Promise.all([
           marketService.searchMarkets({ latitude, longitude, radius }),
-          favoritesService.getFavorites ? favoritesService.getFavorites() : Promise.resolve([])
+          favoritesService.getFavoriteMarkets ? favoritesService.getFavoriteMarkets() : Promise.resolve([])
         ])
         setResults(marketData)
         setMyFavoritesList(favoritesData || [])
@@ -104,29 +104,39 @@ function MarketsResults() {
                 </button>
               ) : null
 
-              const isFavorite = myFavoritesList.includes(marketId)
+              const favoriteRecord = myFavoritesList.find(fav => 
+                String(fav.marketId) === String(marketId) || 
+                String(fav.id) === String(marketId)
+              );
+
+              const isFavorite = !!favoriteRecord;
 
               const handleAddFavorite = async () => {
                 try {
-                  await favoritesService.addFavorite(marketId)
-                  setMyFavoritesList((prev) => [...prev, marketId])
-                  alert(`Added ${name} to favorites!`)
+                  const targetId = marketId;
+                  const newFavData = await favoritesService.addFavorite(targetId);
+                  
+                  setMyFavoritesList((prev) => [...prev, newFavData]);
+                  alert(`Added ${name} to favorites!`);
                 } catch (addError) {
-                  console.error('Error adding to favorites:', addError)
-                  alert(`Failed to add ${name} to favorites: ${addError.message}`)
+                  console.error('Error adding to favorites:', addError);
+                  alert(`Failed to add ${name} to favorites: ${addError.message}`);
                 }
-              }
+              };
 
               const handleRemoveFavorite = async () => {
                 try {
-                  await favoritesService.removeFavorite(marketId)
-                  setMyFavoritesList((prev) => prev.filter((id) => id !== marketId))
-                  alert(`Removed ${name} from favorites!`)
+                  const deletionIdentifier = favoriteRecord ? favoriteRecord.id : marketId;
+
+                  await favoritesService.removeFavorite(deletionIdentifier);
+                  
+                  setMyFavoritesList((prev) => prev.filter((fav) => fav.id !== deletionIdentifier));
+                  alert(`Removed ${name} from favorites!`);
                 } catch (removeError) {
-                  console.error('Error removing from favorites:', removeError)
-                  alert(`Failed to remove ${name} from favorites: ${removeError.message}`)
+                  console.error('Error removing from favorites:', removeError);
+                  alert(`Failed to remove ${name} from favorites: ${removeError.message}`);
                 }
-              }
+              };
 
               const renderLocationDetails = locationDetailSegments.length > 0 ? (
                 <div className="market-location-details">
