@@ -1,0 +1,35 @@
+.market-detail { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center; 
+  color: black; 
+} 
+
+.market-detail .back-button, 
+.market-detail .market-directions-button { 
+  border: 2px solid #333 !important;
+  border-radius: 4px; 
+  padding: 8px 16px; 
+  background-color: #fff; 
+  cursor: pointer; 
+  transition: all 0.2s; 
+  margin-bottom: 20px; 
+  margin-top: 20px; 
+  text-decoration: none !important;
+} 
+
+.market-detail .back-button:hover, 
+.market-detail .market-directions-button:hover { 
+  background-color: #f0f0f0; 
+  border-color: #000 !important; 
+  text-decoration: none !important; 
+} 
+
+.market-detail .back-button { 
+  align-self: flex-start; 
+  display: inline-block; 
+  width: fit-content;
+  margin-left: 5%;
+  color: black !important; 
+}

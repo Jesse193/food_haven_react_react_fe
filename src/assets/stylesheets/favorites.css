@@ -1,0 +1,113 @@
+html, body, #root { 
+  min-height: 100vh; 
+} 
+
+#root { 
+  display: flex; 
+  flex-direction: column; 
+  color: #4c2c69ff; 
+} 
+
+.favorites { 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5%;
+}
+
+.favorites a.login-button { 
+  display: block;
+  box-sizing: border-box; 
+  padding: 12px 16px; 
+  border-radius: 6px; 
+  background: #ef5b5bff;
+  color: #fff;
+  text-decoration: none; 
+  font-weight: 500; 
+  font-size: 1.25rem;
+  width: fit-content; 
+  margin-top: 5%;
+  text-align: center;
+}
+
+.favorites a.login-button:hover {
+  background: #d44c4c;
+  color: #fff;
+  text-decoration: none;
+}
+
+
+.favorites h1, 
+.favorites p { 
+  text-align: center;
+} 
+
+.favorites ul { 
+  list-style: none; 
+  padding: 0; 
+  margin: 16px 0 0; 
+  display: grid; 
+  gap: 16px; 
+  width: 100%; 
+} 
+
+.favorites li { 
+  padding: 16px; 
+  border: 1px solid #e2e8f0; 
+  border-radius: 12px; 
+  background: #fff; 
+  width: 100%; 
+  word-wrap: break-word; 
+  box-sizing: border-box;
+  text-align: center; /* Centers text and elements inside list items */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+} 
+
+.favorites button { 
+  box-sizing: border-box; 
+  padding: 12px 16px; 
+  border: none; 
+  border-radius: 6px; 
+  background: #ef5b5bff; 
+  color: #fff; 
+  cursor: pointer; 
+  align-self: center; /* Centers the button inside the layout */
+  margin-top: 5%; 
+  width: fit-content; 
+} 
+
+.favorites button:hover, 
+market-remove-favorite-button:hover { 
+  text-decoration: none; 
+  color: white; 
+  cursor: pointer; 
+} 
+
+.favorites span a, 
+market-name { 
+  text-decoration: none; 
+  color: black; 
+} 
+
+.favorites span a:hover { 
+  text-decoration: underline; 
+  color: black; 
+} 
+
+.favorites a:hover { 
+  text-decoration: underline; 
+  color: black; 
+} 
+
+.favorites a, 
+h1.site-title { 
+  color: white; 
+} 
+
+.favorites a:hover, 
+h1.site-title { 
+  color: white; 
+}

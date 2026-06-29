@@ -1,0 +1,70 @@
+.global-header {
+  background-color: #009fb7ff;
+  color: white;
+  padding: 20px;
+  font-family: sans-serif;
+  border-top: 1px solid #009fb7ff;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  font-size: 14px;
+}
+
+.header-content h1, a {
+  text-decoration: none;
+  color: white;
+}
+
+.header-content h1:hover, a:hover {
+  text-decoration: underline;
+  color: white;
+}
+
+.header-content p {
+  margin: 0;
+  text-align: center;
+}
+
+.header-links {
+  display: flex;
+  gap: 20px;
+  color: white;
+}
+
+.header-link a h1, site-title {
+  color: white;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.header-link:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header-content p {
+    text-align: center;
+    width: 100%;
+  }
+
+  .header-links {
+    justify-content: center;
+    width: 100%;
+  }
+}
+

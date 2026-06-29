@@ -1,0 +1,20 @@
+@import './markets_search.css';
+@import './login.css';
+@import './favorites.css';
+@import './MarketDetail.css';
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.site-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+}

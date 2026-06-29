@@ -1,0 +1,19 @@
+.cookie-consent-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.cookie-consent-box {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  max-width: 420px;
+  width: calc(100% - 32px);
+  text-align: center;
+}
