@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getCoordinates } from '../services/coordinatesService'
+import '../assets/stylesheets/DirectionsModal.css'
 
 function DirectionsModal({ market, onClose }) {
   const navigate = useNavigate()
@@ -46,8 +47,8 @@ function DirectionsModal({ market, onClose }) {
   }
 
   return (
-    <div className="commutes-modal-container show">
-      <div className="commutes-modal" role="dialog" aria-modal="true" aria-labelledby="directions-modal-heading">
+    <div className="directions-modal-container show">
+      <div className="directions-modal" role="dialog" aria-modal="true" aria-labelledby="directions-modal-heading">
         <div className="content">
           <h2 id="directions-modal-heading" className="heading">
             Get Directions to {market.name}
