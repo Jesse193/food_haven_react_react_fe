@@ -1,18 +1,39 @@
-# React + Vite
+# FoodHaven
+### This is a fork of the original project I worked on [FoodHaven] (https://github.com/FoodHaven/FE_APP)
+In a world with food deserts, Food Haven supplies the public with location services for local farmer's markets. The search for markets focuses on farmer's markets that accept Supplemental Nutrition Assistance Program (SNAP) benefits and identifies the type of benefit assistance at the market if the data is available. The user can then select a market they wish to visit and utilizing the maps portion of the application, the user may locate public service transit routes and schedules available to connect them to the market from their current location.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Features
 
-Currently, two official plugins are available:
+- **Cross Platform**: Compatible with various devices and operating systems.
+- **User Geolocation**: Utilize user's location for personalized content or services.
+- **Responsive Web Design**: Ensures optimal viewing experience across different devices and screen sizes.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+**Client:** 
+ - CSS (styling)
+ - HTML (structure)
 
-Note: This will impact Vite dev & build performances.
+**Server:** 
+ - Javascript (language)
+ - React (framework)
+          
+## Consumed APIs
 
-## Expanding the ESLint configuration
+This project interacts with  external APIs to provide additional functionality and data. Below are the details of the APIs consumed:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Microservice
+- **Endpoint**: 
+- **Usage**: USDA Local Food Portal farmers market directory [here](https://www.usdalocalfoodportal.com/fe/datasharing/)
+- **Documentation**: [Microservice Documentation](https://github.com/Jesse193/sinatra_microservice)
+
+### Google Maps API
+- **Endpoint**: `https://maps.googleapis.com/maps/api/geocode/json`
+- **Usage**: User geolocation, rendering interactive maps, and providing navigation features.
+- **Documentation**: [Google Maps API Docs](https://developers.google.com/maps/documentation)
+  
+## Authors
+### I worked on this fork so that I could further refactor, add more features, and deploy
+
+### This is a fork of the original project [FoodHaven] (https://github.com/FoodHaven/FE_APP) Please see documentation to see everyone that worked on the original project.
