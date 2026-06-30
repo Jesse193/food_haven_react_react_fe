@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { marketService } from '../services/marketsService'
 import { parseMarketData } from '../services/marketParser'
 import { getCoordinates } from '../services/coordinatesService'
+import DirectionsModal from '../components/DirectionsModal'
 
 function MarketDetail() {
   const { id } = useParams()
@@ -12,14 +13,6 @@ function MarketDetail() {
   const [error, setError] = useState(null)
   
   const [showDirectionsModal, setShowDirectionsModal] = useState(false)
-  const [geocodingLoading, setGeocodingLoading] = useState(false)
-  const [directionsError, setDirectionsError] = useState(null)
-  
-  const [addressLine1, setAddressLine1] = useState('')
-  const [addressLine2, setAddressLine2] = useState('')
-  const [city, setCity] = useState('')
-  const [state, setState] = useState('')
-  const [zipCode, setZipCode] = useState('')
 
   useEffect(() => {
     const fetchMarket = async () => {
@@ -169,35 +162,10 @@ function MarketDetail() {
       </button>
 
       {showDirectionsModal && (
-        <div className="commutes-modal-container show">
-          <div className="commutes-modal" role="dialog" aria-modal="true" aria-labelledby="directions-modal-heading">
-            <div className="content">
-              <h2 id="directions-modal-heading" className="heading">
-                Get Directions to {name}
-              </h2>
-              <h4>Enter your Starting Address</h4>
-              <form onSubmit={handleGetDirections}>
-                <input type="text" id="addressLine1" placeholder="Address Line 1" value={addressLine1} onChange={(e) => setAddressLine1(e.target.value)} disabled={geocodingLoading} />
-                <input type="text" id="city" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} disabled={geocodingLoading} />
-                <input type="text" id="state" placeholder="State" value={state} onChange={(e) => setState(e.target.value)} disabled={geocodingLoading} />
-                <input type="text" id="zipCode" placeholder="Zip Code" value={zipCode} onChange={(e) => setZipCode(e.target.value)} disabled={geocodingLoading} />
-                
-                {directionsError && (
-                  <div className="error-message" role="alert">{directionsError}</div>
-                )}
-                
-                <div className="modal-action-bar">
-                  <button className="cancel-button" type="button" onClick={() => setShowDirectionsModal(false)} disabled={geocodingLoading}>
-                    Cancel
-                  </button>
-                  <button className="add-destination-button" type="submit" disabled={geocodingLoading}>
-                    {geocodingLoading ? 'Locating...' : 'Get Directions'}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+        <DirectionsModal
+          market={{ destLat, destLon, name }}
+          onClose={() => setShowDirectionsModal(false)}
+        />
       )}
     </div>
   )
