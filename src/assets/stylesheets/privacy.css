@@ -1,0 +1,25 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#root { 
+  display: flex; 
+  flex-direction: column; 
+  color: #4c2c69ff; 
+} 
+
+.privacy {
+  text-align: left;
+  color: black;
+  margin-left: 5vw;
+}
+
+.privacy h1 {
+  text-align: center;
+}
+
+.privacy p {
+  width: 80vw;
+}

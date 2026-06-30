@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { marketService } from '../services/marketsService'
 import { favoritesService } from '../services/favoritesService'
 import { parseMarketData } from '../services/marketParser'
+import { getCoordinates } from '../services/coordinatesService'
+import DirectionsModal from '../components/DirectionsModal'
 import '../assets/stylesheets/markets_search.css'
 
 function MarketsResults() {
@@ -12,6 +14,8 @@ function MarketsResults() {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
   const [myFavoritesList, setMyFavoritesList] = useState([])
+  const [showDirectionsModal, setShowDirectionsModal] = useState(false)
+  const [selectedMarket, setSelectedMarket] = useState(null)
 
   const originLatitude = searchParams.get('latitude')
   const originLongitude = searchParams.get('longitude')
@@ -20,9 +24,15 @@ function MarketsResults() {
     const latitude = searchParams.get('latitude')
     const longitude = searchParams.get('longitude')
     const radius = searchParams.get('radius') || '10'
+    const address = searchParams.get('address')
+    const name = searchParams.get('name')
+    const addressLine1 = searchParams.get('addressLine1')
+    const city = searchParams.get('city')
+    const state = searchParams.get('state')
+    const zipCode = searchParams.get('zipCode')
 
-    if (!latitude || !longitude) {
-      setError('No coordinates were provided. Please run a search first.')
+    if (!latitude && !longitude && !address && !addressLine1 && !city && !state && !zipCode && !name) {
+      setError('No search criteria provided. Please run a search first.')
       return
     }
 
@@ -30,11 +40,23 @@ function MarketsResults() {
       setLoading(true)
       setError(null)
       try {
-        const [marketData, favoritesData] = await Promise.all([
-          marketService.searchMarkets({ latitude, longitude, radius }),
-          favoritesService.getFavoriteMarkets ? favoritesService.getFavoriteMarkets() : Promise.resolve([])
-        ])
-        setResults(marketData)
+        let marketData
+
+        if (latitude && longitude) {
+          marketData = await marketService.searchMarketsNearby({ latitude, longitude, radius })
+        } else if (addressLine1 || city || state || zipCode) {
+          marketData = await marketService.searchMarketsAddress({ addressLine1, city, state, zipCode })
+        } else if (address) {
+          marketData = await marketService.searchMarketsAddress({ address })
+        } else if (name) {
+          marketData = await marketService.searchMarketsName({ name })
+        }
+
+        const favoritesData = favoritesService.getFavoriteMarkets
+          ? await favoritesService.getFavoriteMarkets()
+          : []
+
+        setResults(marketData || [])
         setMyFavoritesList(favoritesData || [])
       } catch (fetchError) {
         console.error('Error loading market results:', fetchError)
@@ -85,58 +107,62 @@ function MarketsResults() {
                 fnapItems
               } = parseMarketData(market)
 
+              const handleDirectionsClick = () => {
+                if (originLatitude && originLongitude) {
+                  const params = new URLSearchParams({
+                    startLat: originLatitude,
+                    startLon: originLongitude,
+                    destLat: String(destLat),
+                    destLon: String(destLon),
+                    destName: name,
+                  })
+                  navigate(`/directions?${params.toString()}`)
+                } else {
+                  setSelectedMarket({ destLat, destLon, name })
+                  setShowDirectionsModal(true)
+                  setDirectionsError(null)
+                }
+              }
+
               const directionsButton = hasMarketCoordinates ? (
                 <button
                   type="button"
                   className="market-directions-button"
-                  onClick={() => {
-                    const params = new URLSearchParams({
-                      startLat: originLatitude,
-                      startLon: originLongitude,
-                      destLat: String(destLat),
-                      destLon: String(destLon),
-                      destName: name,
-                    })
-                    navigate(`/directions?${params.toString()}`)
-                  }}
+                  onClick={handleDirectionsClick}
                 >
                   Get directions
                 </button>
               ) : null
 
-              const favoriteRecord = myFavoritesList.find(fav => 
-                String(fav.marketId) === String(marketId) || 
+              const favoriteRecord = myFavoritesList.find(fav =>
+                String(fav.marketId) === String(marketId) ||
                 String(fav.id) === String(marketId)
-              );
+              )
 
-              const isFavorite = !!favoriteRecord;
+              const isFavorite = !!favoriteRecord
 
               const handleAddFavorite = async () => {
                 try {
-                  const targetId = marketId;
-                  const newFavData = await favoritesService.addFavorite(targetId);
-                  
-                  setMyFavoritesList((prev) => [...prev, newFavData]);
-                  alert(`Added ${name} to favorites!`);
+                  const newFavData = await favoritesService.addFavorite(marketId)
+                  setMyFavoritesList((prev) => [...prev, newFavData])
+                  alert(`Added ${name} to favorites!`)
                 } catch (addError) {
-                  console.error('Error adding to favorites:', addError);
-                  alert(`Failed to add ${name} to favorites: ${addError.message}`);
+                  console.error('Error adding to favorites:', addError)
+                  alert(`Failed to add ${name} to favorites: ${addError.message}`)
                 }
-              };
+              }
 
               const handleRemoveFavorite = async () => {
                 try {
-                  const deletionIdentifier = favoriteRecord ? favoriteRecord.id : marketId;
-
-                  await favoritesService.removeFavorite(deletionIdentifier);
-                  
-                  setMyFavoritesList((prev) => prev.filter((fav) => fav.id !== deletionIdentifier));
-                  alert(`Removed ${name} from favorites!`);
+                  const deletionIdentifier = favoriteRecord ? favoriteRecord.id : marketId
+                  await favoritesService.removeFavorite(deletionIdentifier)
+                  setMyFavoritesList((prev) => prev.filter((fav) => fav.id !== deletionIdentifier))
+                  alert(`Removed ${name} from favorites!`)
                 } catch (removeError) {
-                  console.error('Error removing from favorites:', removeError);
-                  alert(`Failed to remove ${name} from favorites: ${removeError.message}`);
+                  console.error('Error removing from favorites:', removeError)
+                  alert(`Failed to remove ${name} from favorites: ${removeError.message}`)
                 }
-              };
+              }
 
               const renderLocationDetails = locationDetailSegments.length > 0 ? (
                 <div className="market-location-details">
@@ -145,7 +171,7 @@ function MarketsResults() {
                     const urlMatch = line.match(/https?:\/\/\S+|www\.\S+/i)
                     const sanitizedLine = line.replace(/;+$|;+\s*$/g, '').trim()
                     if (!urlMatch) return <div key={idx}>{sanitizedLine}</div>
-                    
+
                     const url = urlMatch[0]
                     const normalizedUrl = url.startsWith('http') ? url : `https://${url}`
                     const textBeforeUrl = sanitizedLine.replace(url, '').trim()
@@ -231,6 +257,12 @@ function MarketsResults() {
             })}
           </ul>
         </div>
+      )}
+      {showDirectionsModal && (
+        <DirectionsModal
+          market={selectedMarket}
+          onClose={() => setShowDirectionsModal(false)}
+        />
       )}
     </div>
   )
