@@ -40,7 +40,7 @@ const normalizeSearchResponse = (response) => {
 };
 
 export const marketService = {
-  searchMarkets: async ({ latitude, longitude, radius, searchRadius, addressLine1, addressLine2, city, state, zipCode, address }) => {
+  searchMarketsNearby: async ({ latitude, longitude, radius, searchRadius, addressLine1, addressLine2, city, state, zipCode, address }) => {
     const params = new URLSearchParams();
 
     if (latitude != null && longitude != null) {
@@ -58,9 +58,33 @@ export const marketService = {
       if (radius != null) params.set('radius', radius);
       if (searchRadius != null) params.set('searchRadius', searchRadius);
     } else {
-      throw new Error('searchMarkets requires either coordinates or address fields.');
+      throw new Error('searchMarketsNearby requires either coordinates or address fields.');
     }
 
+    const response = await getUrl(`/markets/search?${params.toString()}`);
+    return normalizeSearchResponse(response);
+  },
+
+  searchMarketsAddress: async ({addressLine1, addressLine2, city, state, zipCode, address }) => {
+    const params = new URLSearchParams();
+
+    if (addressLine1 || addressLine2 || city || state || zipCode || address) {
+      if (addressLine1) params.set('addressLine1', addressLine1);
+      if (addressLine2) params.set('addressLine2', addressLine2);
+      if (city) params.set('city', city);
+      if (state) params.set('state', state);
+      if (zipCode) params.set('zipCode', zipCode);
+      if (address) params.set('address', address);
+    } else {
+      throw new Error('searchMarketsAddress requires address fields.');
+    }
+    const response = await getUrl(`/markets/search?${params.toString()}`);
+    return normalizeSearchResponse(response);
+  },
+
+  searchMarketsName: async ({name }) => {
+    if (!name) throw new Error('searchMarketsName requires a market name.');
+    const params = new URLSearchParams({ name });
     const response = await getUrl(`/markets/search?${params.toString()}`);
     return normalizeSearchResponse(response);
   },
@@ -74,4 +98,6 @@ export const marketService = {
     marketIds.forEach((id) => params.append('market_ids[]', id));
     return getUrl(`/favorites?${params.toString()}`);
   },
+
+
 };
