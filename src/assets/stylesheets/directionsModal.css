@@ -21,6 +21,7 @@
 
 .directions-modal .heading {
   margin-bottom: 0.25rem;
+  color: #4c2c69ff;
 }
 
 .directions-modal h4 {
@@ -46,6 +47,7 @@
   display: flex;
   gap: 0.5rem;
   margin-top: 0.5rem;
+  place-self: center;
 }
 
 .directions-modal button.add-destination-button {

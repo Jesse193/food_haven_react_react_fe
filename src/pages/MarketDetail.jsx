@@ -12,7 +12,7 @@ function MarketDetail() {
   const [market, setMarket] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  
+  const [directionsError, setDirectionsError] = useState(null)
   const [showDirectionsModal, setShowDirectionsModal] = useState(false)
 
   useEffect(() => {

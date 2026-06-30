@@ -106,7 +106,6 @@ function MarketsSearch() {
     <div className="markets-search">
       <h2>Search for Farmers Markets Nearby</h2>
       <form onSubmit={handleSearchNearby}>
-        
         <div className="toggle-container">
           <label className="switch-label">
             <input 
