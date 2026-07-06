@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import "../assets/stylesheets/ResetPassword.css"
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:4567";
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 function ResetPassword() {
   const [searchParams] = useSearchParams();

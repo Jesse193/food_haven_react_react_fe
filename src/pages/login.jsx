@@ -12,7 +12,7 @@ function Login() {
     setMessage('')
 
     try {
-      const response = await fetch('http://127.0.0.1:9292/api/login', {
+      const response = await fetch(`${API_BASE}/api/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
