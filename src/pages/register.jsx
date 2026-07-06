@@ -1,18 +1,26 @@
 import { useState } from 'react'
-import '../assets/stylesheets/login.css'
+import { useNavigate } from 'react-router-dom'
+import "../assets/stylesheets/Register.css"
 
-function Login() {
+function Register() {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [token, setToken] = useState(localStorage.getItem('token') || null)
   const [message, setMessage] = useState('')
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault()
     setMessage('')
 
+    if (password !== confirmPassword) {
+      setMessage("Passwords don't match")
+      return
+    }
+
     try {
-      const response = await fetch(`${API_BASE}/api/login`, {
+      const response = await fetch(`${API_BASE}/api/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,34 +32,28 @@ function Login() {
       if (response.ok) {
         localStorage.setItem('token', data.token)
         setToken(data.token)
-        setMessage('Login successful')
+        setMessage('Registration Successful')
+        navigate('/')
       } else {
-        setMessage(data.message || 'Login failed')
+        setMessage(data.message || 'Registration failed')
       }
     } catch (error) {
-      console.error('Error during login:', error)
-      setMessage('An error occurred during login')
+      console.error('Error during Registration:', error)
+      setMessage('An error occurred during Registration')
     }
-  }
-
-  const handleLogout = () => {
-    localStorage.removeItem('token')
-    setToken(null)
-    setMessage('Logged out successfully')
   }
 
   return (
     <>
-      <div className='login'>
+      <div className='register'>
         {token ? (
           <>
-            <button className="logout" onClick={handleLogout}>Logout</button>
-            <h1>Welcome!</h1>
+            <h1>Welcome! You are currently signed in</h1>
           </>
         ) : (
           <>
-            <h1>Login</h1>
-            <form onSubmit={handleLogin}>
+            <h1>Register</h1>
+            <form onSubmit={handleRegister}>
               <input
                 type="email"
                 id="email"
@@ -61,7 +63,6 @@ function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <br />
               <input
                 type="password"
                 id="password"
@@ -71,10 +72,16 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <br />
-              <button type="submit">Login</button>
-              <a className="forgot-password" href="forgot-password">Forgot Password</a>
-              <a className="register-link" href="register">Register</a>
+              <input
+                type="password"
+                id="confirm-password"
+                name="confirm-password"
+                placeholder='Confirm Password'
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              <button type="submit">Register</button>
             </form>
           </>
         )}
@@ -83,5 +90,4 @@ function Login() {
     </>
   )
 }
-
-export default Login
+export default Register;

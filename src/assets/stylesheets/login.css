@@ -70,6 +70,24 @@ html, body, #root {
   text-decoration: none;
 }
 
+.login a.forgot-password {
+  color: black;
+  text-align: center;
+  display: block;
+  width: max-content;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.login a.register-link {
+  color: black;
+  text-align: center;
+  display: block;
+  width: max-content;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
 @media (max-width: 480px) {
   .login button.logout { 
     align-self: center;
