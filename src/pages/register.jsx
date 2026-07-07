@@ -18,7 +18,7 @@ function Register() {
       setMessage("Passwords don't match")
       return
     }
-
+    const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:9292' 
     try {
       const response = await fetch(`${API_BASE}/api/register`, {
         method: 'POST',

@@ -1,19 +1,30 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL; 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
-const getAuthHeaders = () => { 
-  const token = localStorage.getItem('token'); 
-  return { 
-    'Content-Type': 'application/json', 
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {}), 
-  }; 
-}; 
+const normalizeToken = (token) => {
+  if (!token || token === 'null' || token === 'undefined') return null;
+  return token;
+};
 
-const handleResponse = async (response, endpoint) => { 
-  if (!response.ok) { 
-    throw new Error(`API request failed for ${endpoint} with status ${response.status}`); 
-  } 
-  return response.json(); 
-}; 
+const getAuthHeaders = () => {
+  const token = normalizeToken(localStorage.getItem('token'));
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+  };
+};
+
+const handleResponse = async (response, endpoint) => {
+  if (!response.ok) {
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem('token');
+      throw new Error(`Unauthorized request for ${endpoint}. Please log in again.`);
+    }
+
+    throw new Error(`API request failed for ${endpoint} with status ${response.status}`);
+  }
+
+  return response.json();
+};
 
 const getUrl = async (endpoint) => { 
   const response = await fetch(`${BASE_URL}${endpoint}`, { 
@@ -58,11 +69,19 @@ export const favoritesService = {
   }, 
 
   getFavoriteMarkets: async () => { 
-    return getUrl('/api/favorites').then((serializerResult) => { 
-      if (serializerResult && serializerResult.data) { 
-        return serializerResult.data.map(unwrapFavorite); 
-      } 
-      return Array.isArray(serializerResult) ? serializerResult.map(unwrapFavorite) : []; 
-    }); 
+    return getUrl('/api/favorites')
+      .then((serializerResult) => {
+        if (serializerResult && serializerResult.data) {
+          return serializerResult.data.map(unwrapFavorite);
+        }
+        return Array.isArray(serializerResult) ? serializerResult.map(unwrapFavorite) : [];
+      })
+      .catch((error) => {
+        if (error.message.includes('Unauthorized')) {
+          return [];
+        }
+        throw error;
+      });
   }, 
 };
+
