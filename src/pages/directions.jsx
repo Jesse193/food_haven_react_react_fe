@@ -99,6 +99,14 @@ const Directions = () => {
       bounds.extend({ lat: originLat, lng: originLon })
       bounds.extend({ lat: destinationLat, lng: destinationLon })
       map.fitBounds(bounds)
+      
+      window.google.maps.event.addListenerOnce(map, 'idle', () => {
+        const currentZoom = map.getZoom()
+        const minDesiredZoom = 12
+        const maxDesiredZoom = 16
+        if (currentZoom < minDesiredZoom) map.setZoom(minDesiredZoom)
+        if (currentZoom > maxDesiredZoom) map.setZoom(maxDesiredZoom)
+      })
 
       try {
         const { routes } = await Route.computeRoutes({
