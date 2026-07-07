@@ -52,7 +52,9 @@ function MarketsResults() {
           marketData = await marketService.searchMarketsName({ name })
         }
 
-        const favoritesData = favoritesService.getFavoriteMarkets
+        const rawToken = localStorage.getItem('token')
+        const token = rawToken && rawToken !== 'null' && rawToken !== 'undefined' ? rawToken : null
+        const favoritesData = token
           ? await favoritesService.getFavoriteMarkets()
           : []
 
