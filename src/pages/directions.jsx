@@ -33,80 +33,196 @@ const Directions = () => {
   useEffect(() => {
     if (!mapsApiKey || !hasRoute || !travelMode) return
 
-    const loadScript = (src, dataAttr) => {
-      if (document.querySelector(`script[data-${dataAttr}]`)) return Promise.resolve()
+    // Google's official dynamic-library-import bootstrap loader. This defines
+    // `google.maps.importLibrary`, which google.maps.routes.Route.computeRoutes
+    // requires. A plain <script src="..."> tag does not define importLibrary,
+    // so this replaces the old loadScript helper. See:
+    // https://developers.google.com/maps/documentation/javascript/load-maps-js-api
+    const loadGoogleMapsBootstrap = (apiKey) => {
+      if (window.google?.maps?.importLibrary) return
 
-      return new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = src
-        script.async = true
-        script.defer = true
-        script.setAttribute(`data-${dataAttr}`, 'true')
-        script.onload = resolve
-        script.onerror = reject
-        document.body.appendChild(script)
-      })
+      ;((g) => {
+        let h
+        let a
+        let k
+        const p = 'The Google Maps JavaScript API'
+        const c = 'google'
+        const l = 'importLibrary'
+        const q = '__ib__'
+        const m = document
+        let b = window
+        b = b[c] || (b[c] = {})
+        const d = b.maps || (b.maps = {})
+        const r = new Set()
+        const e = new URLSearchParams()
+        const u = () =>
+          h ||
+          (h = new Promise(async (f, n) => {
+            a = m.createElement('script')
+            e.set('libraries', [...r] + '')
+            for (k in g) e.set(k.replace(/[A-Z]/g, (t) => '_' + t[0].toLowerCase()), g[k])
+            e.set('callback', c + '.maps.' + q)
+            a.src = `https://maps.${c}apis.com/maps/api/js?` + e
+            d[q] = f
+            a.onerror = () => (h = n(Error(p + ' could not load.')))
+            a.nonce = m.querySelector('script[nonce]')?.nonce || ''
+            m.head.append(a)
+          }))
+        d[l]
+          ? console.warn(p + ' only loads once. Ignoring:', g)
+          : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)))
+      })({ key: apiKey, v: 'weekly' })
     }
 
-    const renderDirections = () => {
+    const renderDirections = async () => {
       const mapView = document.querySelector('.map-view')
       const directionsPanel = document.getElementById('directions-panel')
       if (!mapView || !directionsPanel || !window.google?.maps) return
 
-      const map = new window.google.maps.Map(mapView, {
+      const { Map } = await window.google.maps.importLibrary('maps')
+      const { Route } = await window.google.maps.importLibrary('routes')
+
+      const map = new Map(mapView, {
         center: { lat: originLat, lng: originLon },
         zoom: 14,
+        // Advanced Markers (used below for pins) refuse to render without a
+        // Map ID. DEMO_MAP_ID works for development; swap in your own Map ID
+        // from Cloud Console > Google Maps Platform > Map Management for
+        // production, since the demo ID has usage restrictions.
+        mapId: import.meta.env.VITE_MAPS_MAP_ID || 'DEMO_MAP_ID',
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: false,
       })
 
-      const directionsService = new window.google.maps.DirectionsService()
-      const directionsRenderer = new window.google.maps.DirectionsRenderer({
-        map,
-        panel: directionsPanel,
-      })
+      const bounds = new window.google.maps.LatLngBounds()
+      bounds.extend({ lat: originLat, lng: originLon })
+      bounds.extend({ lat: destinationLat, lng: destinationLon })
+      map.fitBounds(bounds)
 
-      setRouteError(null)
-      setModalError(null)
-      directionsService.route(
-        {
+      try {
+        const { routes } = await Route.computeRoutes({
           origin: { lat: originLat, lng: originLon },
           destination: { lat: destinationLat, lng: destinationLon },
-          travelMode: window.google.maps.TravelMode[travelMode],
-        },
-        (result, status) => {
-          if (status === 'OK') {
-            setRouteError(null)
-            setModalError(null)
-            directionsRenderer.setDirections(result)
-            const url = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLon}&destination=${destinationLat},${destinationLon}&travelmode=${travelMode.toLowerCase()}`
-            setDirectionsUrl(url)
-            if (closeModalOnSuccess) {
-              setIsModalOpen(false)
-              setCloseModalOnSuccess(false)
-            }
-          } else {
-            const message =
-              travelMode === 'TRANSIT' && status === 'ZERO_RESULTS'
-                ? 'Public transport is not available for this route. Try a different travel mode.'
-                : `Directions request failed: ${status}`
+          travelMode,
+          fields: ['legs', 'path', 'durationMillis', 'distanceMeters'],
+        })
 
-            setRouteError(message)
-            setModalError(message)
-            console.error('Directions request failed:', status)
+        if (!routes || routes.length === 0) {
+          const message =
+            travelMode === 'TRANSIT'
+              ? 'Public transport is not available for this route. Try a different travel mode.'
+              : 'No route could be found for this travel mode.'
+          setRouteError(message)
+          setModalError(message)
+          return
+        }
+
+        const route = routes[0]
+
+        // Draw the route line on the map.
+        route.createPolylines().forEach((polyline) => polyline.setMap(map))
+
+        const { AdvancedMarkerElement } = await window.google.maps.importLibrary('marker')
+
+        const createCustomMarker = (position, title, label) => {
+          const content = document.createElement('div')
+          content.style.display = 'flex'
+          content.style.alignItems = 'center'
+          content.style.justifyContent = 'center'
+          content.style.width = '28px'
+          content.style.height = '28px'
+          content.style.borderRadius = '50%'
+          content.style.backgroundColor = '#1f6feb'
+          content.style.color = '#fff'
+          content.style.fontSize = '13px'
+          content.style.fontWeight = '700'
+          content.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.25)'
+          content.style.border = '2px solid #fff'
+          content.textContent = label
+
+          return new AdvancedMarkerElement({
+            position,
+            map,
+            title,
+            content,
+          })
+        }
+
+        createCustomMarker({ lat: originLat, lng: originLon }, 'Start', 'S')
+        createCustomMarker({ lat: destinationLat, lng: destinationLon }, destinationName || 'Destination', 'D')
+
+        // Rebuild the turn-by-turn panel (imperative DOM, matching the
+        // original code's direct DOM access pattern rather than adding
+        // new React state). DirectionsRenderer used to generate and style
+        // this HTML itself via setPanel(); Route only returns raw step
+        // data, so the structure/spacing below is now ours to own.
+        const formatDistance = (meters) => {
+          if (meters == null) return ''
+          if (meters >= 1000) {
+            const km = meters / 1000
+            return `${km.toFixed(km >= 10 ? 0 : 1)} km`
           }
-        },
-      )
+          return `${Math.round(meters)} m`
+        }
+
+        const getStepIcon = (step) => {
+          const maneuver = (step.navigationInstruction?.maneuver || step.maneuver || '').toUpperCase()
+          const instruction = (step.navigationInstruction?.instructions || step.instructions || '').toLowerCase()
+
+          if (maneuver.includes('ROUNDABOUT')) return '↺'
+          if (maneuver.includes('U_TURN') || instruction.includes('u-turn')) return '↻'
+          if (maneuver.includes('LEFT') || instruction.includes('left')) return '↰'
+          if (maneuver.includes('RIGHT') || instruction.includes('right')) return '↱'
+          if (maneuver.includes('MERGE') || instruction.includes('merge')) return '⇄'
+          if (maneuver.includes('FERRY') || instruction.includes('ferry')) return '⛴'
+          if (maneuver.includes('DEPART') || instruction.includes('depart')) return '▶'
+          if (maneuver.includes('ARRIVE') || instruction.includes('arrive')) return '✓'
+          if (instruction.includes('continue') || instruction.includes('straight')) return '↑'
+          return '•'
+        }
+
+        directionsPanel.innerHTML = ''
+        route.legs?.forEach((leg) => {
+          leg.steps?.forEach((step) => {
+            const stepEl = document.createElement('div')
+            stepEl.className = 'directions-step'
+            const instruction = step.navigationInstruction?.instructions || step.instructions || ''
+            const distanceText = step.distanceMeters != null ? formatDistance(step.distanceMeters) : ''
+            const icon = getStepIcon(step)
+            stepEl.innerHTML = `
+              <div class="directions-step__body">
+                <div class="directions-step__icon" aria-hidden="true">${icon}</div>
+                <div>
+                  <div class="directions-step__instruction">${instruction}</div>
+                  ${distanceText ? `<div class="directions-step__meta">${distanceText}</div>` : ''}
+                </div>
+              </div>
+            `
+            directionsPanel.appendChild(stepEl)
+          })
+        })
+
+        const url = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLon}&destination=${destinationLat},${destinationLon}&travelmode=${travelMode.toLowerCase()}`
+        setDirectionsUrl(url)
+        setRouteError(null)
+        setModalError(null)
+        if (closeModalOnSuccess) {
+          setIsModalOpen(false)
+          setCloseModalOnSuccess(false)
+        }
+      } catch (error) {
+        const message = `Directions request failed: ${error.message || 'unknown error'}`
+        setRouteError(message)
+        setModalError(message)
+        console.error('Directions request failed:', error)
+      }
     }
 
     const loadGoogleMaps = async () => {
       try {
-        await loadScript(
-          `https://maps.googleapis.com/maps/api/js?key=${mapsApiKey}&libraries=places,geometry`,
-          'google-maps-script',
-        )
-        renderDirections()
+        loadGoogleMapsBootstrap(mapsApiKey)
+        await renderDirections()
       } catch (error) {
         console.error('Google Maps failed to load', error)
       }
