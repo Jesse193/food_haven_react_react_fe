@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.API_BASE_URL || 'http://localhost:3001';
+const BASE_URL = '/api'|| 'http://localhost:3001';
 
 const handleResponse = async (response, endpoint) => {
   if (!response.ok) {
