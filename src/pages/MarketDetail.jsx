@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { marketService } from '../services/MarketsService'
-import { parseMarketData } from '../services/MarketParser'
-import { getCoordinates } from '../services/CoordinatesService'
+import { marketService } from '../services/marketsService'
+import { parseMarketData } from '../services/marketParser'
+import { getCoordinates } from '../services/coordinatesService'
 import DirectionsModal from '../components/DirectionsModal'
 import '../assets/stylesheets/MarketDetail.css'
 

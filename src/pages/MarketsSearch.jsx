@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCoordinates } from '../services/CoordinatesService'
+import { getCoordinates } from '../services/coordinatesService'
 import '../assets/stylesheets/MarketsSearch.css'
-import { useGeolocation } from '../services/GeolocationService'
+import { useGeolocation } from '../services/geolocationService'
 
 function MarketsSearch() {
   const { position, error: geoError, loading: geoLoading } = useGeolocation();

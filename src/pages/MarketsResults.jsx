@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { marketService } from '../services/MarketsService'
-import { favoritesService } from '../services/FavoritesService'
-import { parseMarketData } from '../services/MarketParser'
-import { getCoordinates } from '../services/CoordinatesService'
+import { marketService } from '../services/marketsService'
+import { favoritesService } from '../services/favoritesService'
+import { parseMarketData } from '../services/marketParser'
+import { getCoordinates } from '../services/coordinatesService'
 import DirectionsModal from '../components/DirectionsModal'
 import '../assets/stylesheets/MarketsSearch.css'
 

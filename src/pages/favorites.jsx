@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { favoritesService } from '../services/FavoritesService';
+import { favoritesService } from '../services/favoritesService';
 import '../assets/stylesheets/Favorites.css'
 
 function Favorites() {
