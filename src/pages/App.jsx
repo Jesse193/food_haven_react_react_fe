@@ -2,7 +2,7 @@ import { useState } from 'react'
 import '../assets/stylesheets/App.css'
 import Overlay from '../components/Overlay'
 import Footer from '../components/Footer'
-import Header from '../components/header'
+import Header from '../components/Header'
 import { Outlet } from 'react-router-dom'
 import CookieConsent from '../components/CookieConsent';
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import '../assets/stylesheets/directions.css'
+import '../assets/stylesheets/Directions.css'
 
 const Directions = () => {
   const [searchParams] = useSearchParams()
@@ -16,7 +16,7 @@ const Directions = () => {
   const destinationLon = parseNumber(searchParams.get('destLon') || searchParams.get('destinationLon'))
   const destinationName = searchParams.get('destName') || ''
   const address = searchParams.get('address') || ''
-  const mapsApiKey = import.meta.env.VITE_MAPS_API_KEY || ''
+  const mapsApiKey = import.meta.env.MAPS_API_KEY || ''
   const hasRoute = originLat != null && originLon != null && destinationLat != null && destinationLon != null
   const [directionsUrl, setDirectionsUrl] = useState('')
 
@@ -89,7 +89,7 @@ const Directions = () => {
         // Map ID. DEMO_MAP_ID works for development; swap in your own Map ID
         // from Cloud Console > Google Maps Platform > Map Management for
         // production, since the demo ID has usage restrictions.
-        mapId: import.meta.env.VITE_MAPS_MAP_ID || 'DEMO_MAP_ID',
+        mapId: import.meta.env.MAPS_MAP_ID || 'DEMO_MAP_ID',
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: false,

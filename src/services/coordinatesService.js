@@ -1,5 +1,5 @@
 const BASE_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
-const API_KEY = import.meta.env.VITE_MAPS_API_KEY;
+const API_KEY = import.meta.env.MAPS_API_KEY;
 
 const handleResponse = async (response) => {
   if (!response.ok) {

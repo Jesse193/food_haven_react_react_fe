@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import '../assets/stylesheets/login.css'
+import '../assets/stylesheets/Login.css'
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -10,7 +10,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault()
     setMessage('')
-    const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:9292'
+    const API_BASE = import.meta.env.API_BASE_URL || 'http://localhost:9292'
     try {
       const response = await fetch(`${API_BASE}/api/login`, {
         method: 'POST',

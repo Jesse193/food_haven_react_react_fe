@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+const BASE_URL = import.meta.env.API_BASE_URL || '';
 
 const normalizeToken = (token) => {
   if (!token || token === 'null' || token === 'undefined') return null;
