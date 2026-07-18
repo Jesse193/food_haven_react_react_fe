@@ -5,20 +5,27 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 import { Outlet } from 'react-router-dom'
 import CookieConsent from '../components/CookieConsent';
+import { LoadScript } from '@react-google-maps/api'
 
 function App() {
   return (
     <>
-      <div className="site-wrapper">
-        <Header />
-        <main className="site-content">
-          <Outlet />
-        </main>
+      <LoadScript
+      googleMapsApiKey={import.meta.env.VITE_MAPS_API_KEY}
+      libraries={["places"]}
+      >
+        <div className="site-wrapper">
+          <Header />
+          <main className="site-content">
+            <Outlet />
+          </main>
 
-        <Footer />
-      </div>
+          <Footer />
+        </div>
 
-      <CookieConsent />
+        <CookieConsent />
+    </LoadScript>
+
     </>
   )
 }
