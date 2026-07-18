@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import "../assets/stylesheets/ResetPassword.css"
 
-const API_BASE = import.meta.env.API_BASE_URL;
+const BASE_URL = '/api';
 
 function ResetPassword() {
   const [searchParams] = useSearchParams();
@@ -26,7 +26,7 @@ function ResetPassword() {
     setStatus("loading");
 
     try {
-      const res = await fetch(`${API_BASE}/api/password_resets/${token}`, {
+      const res = await fetch(`${BASE_URL}/password_resets/${token}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

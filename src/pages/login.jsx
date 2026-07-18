@@ -10,9 +10,9 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault()
     setMessage('')
-    const API_BASE = import.meta.env.API_BASE_URL || 'http://localhost:9292'
+    const BASE_URL = '/api' || 'http://localhost:9292'
     try {
-      const response = await fetch(`${API_BASE}/api/login`, {
+      const response = await fetch(`${BASE_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
