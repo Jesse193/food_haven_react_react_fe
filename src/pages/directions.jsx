@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import '../assets/stylesheets/directions.css'
+import '../assets/stylesheets/Directions.css'
 
 const Directions = () => {
   const [searchParams] = useSearchParams()
@@ -89,7 +89,7 @@ const Directions = () => {
         // Map ID. DEMO_MAP_ID works for development; swap in your own Map ID
         // from Cloud Console > Google Maps Platform > Map Management for
         // production, since the demo ID has usage restrictions.
-        mapId: import.meta.env.VITE_MAPS_MAP_ID || 'DEMO_MAP_ID',
+        mapId: import.meta.env.MAPS_MAP_ID || 'DEMO_MAP_ID',
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: false,
@@ -99,6 +99,14 @@ const Directions = () => {
       bounds.extend({ lat: originLat, lng: originLon })
       bounds.extend({ lat: destinationLat, lng: destinationLon })
       map.fitBounds(bounds)
+      
+      window.google.maps.event.addListenerOnce(map, 'idle', () => {
+        const currentZoom = map.getZoom()
+        const minDesiredZoom = 12
+        const maxDesiredZoom = 16
+        if (currentZoom < minDesiredZoom) map.setZoom(minDesiredZoom)
+        if (currentZoom > maxDesiredZoom) map.setZoom(maxDesiredZoom)
+      })
 
       try {
         const { routes } = await Route.computeRoutes({

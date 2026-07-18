@@ -5,7 +5,7 @@ import { favoritesService } from '../services/favoritesService'
 import { parseMarketData } from '../services/marketParser'
 import { getCoordinates } from '../services/coordinatesService'
 import DirectionsModal from '../components/DirectionsModal'
-import '../assets/stylesheets/markets_search.css'
+import '../assets/stylesheets/MarketsSearch.css'
 
 function MarketsResults() {
   const [searchParams] = useSearchParams()

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import '../assets/stylesheets/login.css'
+import '../assets/stylesheets/Login.css'
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -10,9 +10,9 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault()
     setMessage('')
-    const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:9292'
+    const BASE_URL = '/api' || 'http://localhost:9292'
     try {
-      const response = await fetch(`${API_BASE}/api/login`, {
+      const response = await fetch(`${BASE_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ function Login() {
               />
               <br />
               <button type="submit">Login</button>
-              <a className="forgot-password" href="forgot-password">Forgot Password</a>
+              <h3>Forgot Password is Currently Unavailable</h3>
               <a className="register-link" href="register">Register</a>
             </form>
           </>

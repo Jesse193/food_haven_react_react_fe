@@ -18,15 +18,20 @@ function Register() {
       setMessage("Passwords don't match")
       return
     }
-    const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:9292' 
+
+    const BASE_URL = window.location.hostname === 'localhost' 
+      ? 'http://localhost:9292/api' 
+      : '/api'
+
     try {
-      const response = await fetch(`${API_BASE}/api/register`, {
+      const response = await fetch(`${BASE_URL}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       })
+      
       const data = await response.json()
 
       if (response.ok) {
@@ -35,7 +40,11 @@ function Register() {
         setMessage('Registration Successful')
         navigate('/')
       } else {
-        setMessage(data.message || 'Registration failed')
+        if (data.errors && Array.isArray(data.errors)) {
+          setMessage(data.errors.join(', '))
+        } else {
+          setMessage(data.error || data.message || 'Registration failed')
+        }
       }
     } catch (error) {
       console.error('Error during Registration:', error)

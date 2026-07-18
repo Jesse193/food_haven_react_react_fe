@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../assets/stylesheets/ForgotPassword.css"
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = '/api';
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -14,7 +14,7 @@ function ForgotPassword() {
     setErrorMessage("");
 
     try {
-      const res = await fetch(`${API_BASE}/api/password_resets`, {
+      const res = await fetch(`${BASE_URL}/password_resets`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

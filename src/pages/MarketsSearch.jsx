@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getCoordinates } from '../services/coordinatesService'
-import '../assets/stylesheets/markets_search.css'
+import '../assets/stylesheets/MarketsSearch.css'
 import { useGeolocation } from '../services/geolocationService'
 
 function MarketsSearch() {

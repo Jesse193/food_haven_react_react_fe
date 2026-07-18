@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+const BASE_URL = '/api' || '';
 
 const normalizeToken = (token) => {
   if (!token || token === 'null' || token === 'undefined') return null;
@@ -51,25 +51,25 @@ const unwrapFavorite = (response) => {
 
 export const favoritesService = { 
   addFavorite: async (marketId) => { 
-    const response = await fetch(`${BASE_URL}/api/favorites`, { 
+    const response = await fetch(`${BASE_URL}/favorites`, { 
       method: 'POST', 
       headers: getAuthHeaders(), 
       body: JSON.stringify({ market: marketId }), 
     }); 
-    const data = await handleResponse(response, '/api/favorites'); 
+    const data = await handleResponse(response, '/favorites'); 
     return unwrapFavorite(data); 
   }, 
 
   removeFavorite: async (marketId) => { 
-    const response = await fetch(`${BASE_URL}/api/favorites/${marketId}`, { 
+    const response = await fetch(`${BASE_URL}/favorites/${marketId}`, { 
       method: 'DELETE', 
       headers: getAuthHeaders(), 
     }); 
-    return handleResponse(response, `/api/favorites/${marketId}`); 
+    return handleResponse(response, `/favorites/${marketId}`); 
   }, 
 
   getFavoriteMarkets: async () => { 
-    return getUrl('/api/favorites')
+    return getUrl('/favorites')
       .then((serializerResult) => {
         if (serializerResult && serializerResult.data) {
           return serializerResult.data.map(unwrapFavorite);

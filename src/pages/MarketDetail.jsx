@@ -4,7 +4,7 @@ import { marketService } from '../services/marketsService'
 import { parseMarketData } from '../services/marketParser'
 import { getCoordinates } from '../services/coordinatesService'
 import DirectionsModal from '../components/DirectionsModal'
-import '../assets/stylesheets/marketDetail.css'
+import '../assets/stylesheets/MarketDetail.css'
 
 function MarketDetail() {
   const { id } = useParams()
