@@ -73,7 +73,7 @@ function Login() {
               />
               <br />
               <button type="submit">Login</button>
-              <h3>Forgot Password is Currently Unavailable</h3>
+              <h5 className='forgot-password'>Forgot Password is Currently Unavailable</h5>
               <a className="register-link" href="register">Register</a>
             </form>
           </>
