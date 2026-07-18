@@ -16,7 +16,7 @@ const Directions = () => {
   const destinationLon = parseNumber(searchParams.get('destLon') || searchParams.get('destinationLon'))
   const destinationName = searchParams.get('destName') || ''
   const address = searchParams.get('address') || ''
-  const mapsApiKey = import.meta.env.MAPS_API_KEY || ''
+  const mapsApiKey = import.meta.env.VITE_MAPS_API_KEY || ''
   const hasRoute = originLat != null && originLon != null && destinationLat != null && destinationLon != null
   const [directionsUrl, setDirectionsUrl] = useState('')
 
