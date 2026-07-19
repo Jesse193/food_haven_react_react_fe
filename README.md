@@ -21,7 +21,7 @@ In a world with food deserts, Food Haven supplies the public with location servi
           
 ## Consumed APIs
 
-This project interacts with  external APIs to provide additional functionality and data. Below are the details of the APIs consumed:
+This project interacts with external APIs to provide additional functionality and data. Below are the details of the APIs consumed:
 
 ### Microservice
 - **Endpoint**: 
@@ -32,7 +32,11 @@ This project interacts with  external APIs to provide additional functionality a
 - **Endpoint**: `https://maps.googleapis.com/maps/api/geocode/json`
 - **Usage**: User geolocation, rendering interactive maps, and providing navigation features.
 - **Documentation**: [Google Maps API Docs](https://developers.google.com/maps/documentation)
-  
+
+## Vercel
+### This is a branch that is ready for deployment to Vercel
+
+
 ## Authors
 ### I worked on this fork so that I could further refactor, add more features, and deploy
 
