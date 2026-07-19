@@ -1,7 +1,9 @@
 import { useState } from "react";
 import "../assets/stylesheets/ForgotPassword.css"
 
-const BASE_URL = '/api';
+const BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:9292/api' 
+  : '/api'
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");

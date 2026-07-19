@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import "../assets/stylesheets/ResetPassword.css"
 
-const BASE_URL = '/api';
+const BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:9292/api' 
+  : '/api'
 
 function ResetPassword() {
   const [searchParams] = useSearchParams();
