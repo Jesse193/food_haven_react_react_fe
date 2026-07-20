@@ -48,7 +48,7 @@ jobs:
         run: npm install
 
       - name: Install backend gems
-        working-directory: backend
+        working-directory: ./
         run: bundle install
 
       - name: Install Playwright browsers
