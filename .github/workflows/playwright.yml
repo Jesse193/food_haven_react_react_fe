@@ -9,6 +9,7 @@ on:
 jobs:
   feature-tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     services:
       postgres:
@@ -26,39 +27,43 @@ jobs:
           --health-retries=5
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout frontend
+        uses: actions/checkout@v4
 
       - name: Checkout backend
         uses: actions/checkout@v4
         with:
           repository: jesse193/sinatra_microservice
-          path: ./
+          path: backend
 
-      - uses: ruby/setup-ruby@v1
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
-          bundler-cache: true
-          working-directory: ./
+          bundler-cache: false
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
       - name: Install frontend dependencies
-        run: npm install
+        run: npm ci
 
       - name: Install backend gems
-        working-directory: ./
+        working-directory: backend
         run: bundle install
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
       - name: Run backend feature specs
-        working-directory: ./
+        working-directory: backend
         env:
           RACK_ENV: test
           SINATRA_ENV: test
           DATABASE_URL: postgres://postgres:password@localhost:5432/microservice_sinatra_test
           JWT_SECRET: test_jwt_secret_for_ci_only
+          FRONTEND_DIR: ..
         run: bundle exec rspec spec/features
