@@ -58,6 +58,15 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
+      - name: Prepare test database
+        working-directory: backend
+        env:
+          RACK_ENV: test
+          DATABASE_URL: postgres://postgres:password@localhost:5432/microservice_sinatra_test
+        run: |
+          bundle exec rake db:create
+          bundle exec rake db:migrate
+          
       - name: Run backend feature specs
         working-directory: backend
         env:
