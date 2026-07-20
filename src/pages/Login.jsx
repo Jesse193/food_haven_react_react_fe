@@ -10,7 +10,9 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault()
     setMessage('')
-    const BASE_URL = '/api' || 'http://localhost:9292'
+    const BASE_URL = window.location.hostname === 'localhost' 
+      ? 'http://localhost:9292/api' 
+      : '/api'
     try {
       const response = await fetch(`${BASE_URL}/login`, {
         method: 'POST',

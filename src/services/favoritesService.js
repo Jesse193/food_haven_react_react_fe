@@ -1,4 +1,6 @@
-const BASE_URL = '/api' || '';
+const BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:9292/api' 
+  : '/api'
 
 const normalizeToken = (token) => {
   if (!token || token === 'null' || token === 'undefined') return null;

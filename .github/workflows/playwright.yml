@@ -1,0 +1,78 @@
+name: Feature Tests
+
+on:
+  push:
+    branches: [main, ci]
+  pull_request:
+    branches: [main, ci]
+
+jobs:
+  feature-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: microservice_sinatra_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout frontend
+        uses: actions/checkout@v4
+
+      - name: Checkout backend
+        uses: actions/checkout@v4
+        with:
+          repository: jesse193/sinatra_microservice
+          path: backend
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Install backend gems
+        working-directory: backend
+        run: bundle install
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Prepare test database
+        working-directory: backend
+        env:
+          RACK_ENV: test
+          DATABASE_URL: postgres://postgres:password@localhost:5432/microservice_sinatra_test
+        run: |
+          bundle exec rake db:create
+          bundle exec rake db:migrate
+          
+      - name: Run backend feature specs
+        working-directory: backend
+        env:
+          RACK_ENV: test
+          SINATRA_ENV: test
+          DATABASE_URL: postgres://postgres:password@localhost:5432/microservice_sinatra_test
+          JWT_SECRET: test_jwt_secret_for_ci_only
+          FRONTEND_DIR: ..
+        run: bundle exec rspec spec/features

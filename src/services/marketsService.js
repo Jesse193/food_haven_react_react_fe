@@ -1,4 +1,6 @@
-const BASE_URL = '/api' || 'http://localhost:3001';
+const BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:9292/api' 
+  : '/api'
 
 const handleResponse = async (response, endpoint) => {
   if (!response.ok) {
